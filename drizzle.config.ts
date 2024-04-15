@@ -5,7 +5,7 @@ export default defineConfig({
   driver: 'libsql',
   out: 'drizzle',
   dbCredentials: {
-    url: 'file:./sqlite.db',
+    url: 'file:./db/sqlite.db',
   },
   verbose: true,
   strict: true,
