@@ -1,12 +1,11 @@
 <script>
-  import { Toaster } from '$lib/components/ui/sonner'
-  import { ModeWatcher } from 'mode-watcher'
-  import '../app.pcss'
-  import { lacksName, userName } from '$lib/userStore'
+  import { Button } from '$lib/components/ui/button'
   import * as Dialog from '$lib/components/ui/dialog'
   import { Input } from '$lib/components/ui/input'
-  import { Button } from '$lib/components/ui/button'
-  import { enhance } from '$app/forms'
+  import { Toaster } from '$lib/components/ui/sonner'
+  import { lacksName, userName } from '$lib/userStore'
+  import { ModeWatcher } from 'mode-watcher'
+  import '../app.pcss'
 
   let nameInput = ''
 </script>

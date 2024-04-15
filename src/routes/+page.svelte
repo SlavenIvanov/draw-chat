@@ -3,9 +3,15 @@
   import { enhance } from '$app/forms'
   import { sendHeartbeat } from '$lib/client/heartbeat'
   import * as Card from '$lib/components/ui/card'
-  import { CELLS, HEARTBEAT_INTERVAL } from '$lib/constants'
+  import {
+    CELLS,
+    HEARTBEAT_INTERVAL,
+    USER_FETCH_INTERVAL,
+  } from '$lib/constants'
   import { lacksName, userName } from '$lib/userStore'
+  import { onMount } from 'svelte'
   import type { PageData } from './$types'
+  import { fetchOnlineUsers } from '$lib/client/onlineUsers'
 
   export let data: PageData
 
@@ -46,13 +52,26 @@
       }, HEARTBEAT_INTERVAL)
     }
   }
+
+  let onlineUsers: any[] = []
+  onMount(() => {
+    fetchOnlineUsers().then((users) => {
+      onlineUsers = users
+    })
+    const onlineUsersInterval = setInterval(async () => {
+      onlineUsers = await fetchOnlineUsers()
+    }, USER_FETCH_INTERVAL)
+
+    return () => {
+      clearInterval(onlineUsersInterval)
+    }
+  })
 </script>
 
-<div class="align-end">{$userName}</div>
 <div class="h-screen flex flex-col items-center justify-center">
-  {#await Promise.all([data.streamed.pixels, data.streamed.onlineUsers])}
+  {#await data.streamed.pixels}
     <div>Loading pixels</div>
-  {:then [pixels, onlineUsers]}
+  {:then pixels}
     <div>
       <div class={'flex justify-center p-3'}>
         {#each colors as color}
@@ -67,10 +86,8 @@
         {/each}
       </div>
       <form
-        use:enhance={({ submitter }) => {
-          //preventing page refresh on submit https://stackoverflow.com/questions/78197915/how-do-i-prevent-page-from-refreshing-when-a-from-component-is-submitted-in-svel
-          return async () => {}
-        }}
+        use:enhance
+        on:submit|preventDefault
         method="POST"
         action="?/paint"
         class={'d'}
@@ -91,13 +108,17 @@
         {/each}
       </form>
     </div>
-    <div class="p-3 gap-3 flex flex-col">
-      <div class="text-xl text-center">Who is online 👇</div>
-      {#each onlineUsers as onlineUser}
-        <p class={' p-2 outline outline-solid outline-2'}>{onlineUser.name}</p>
-      {/each}
-    </div>
   {:catch error}
     <p>Error</p>
   {/await}
+  <div class="p-3 gap-3 flex flex-col">
+    <div class="text-xl text-center">Who is online 👇</div>
+    {#each onlineUsers as onlineUser}
+      <p
+        class={`p-2 outline outline-solid outline-2 ${onlineUser.name === $userName ? 'outline-purple-400' : ''}`}
+      >
+        {onlineUser.name}
+      </p>
+    {/each}
+  </div>
 </div>

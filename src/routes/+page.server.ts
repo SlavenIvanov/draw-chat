@@ -1,16 +1,13 @@
 import { CELLS } from '$lib/constants.js'
-import { PAINT_EVENT, paintEmitter } from '$lib/server/PaintEvents'
+import { PAINT_EVENT, paintEmitter } from '$lib/server/EventEmitters'
 import { getOnlineUsers, getPixels, setPixel } from '$lib/server/db/db.js'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = () => {
-  console.log('LOAD')
-
   return {
     // TODO fix streaming promises https://kit.svelte.dev/docs/load#streaming-with-promises
     streamed: {
       pixels: getPixels(),
-      onlineUsers: getOnlineUsers(),
     },
   }
 }
@@ -34,7 +31,6 @@ export const actions = {
 
     setPixel(x, y, color)
     paintEmitter.emit(PAINT_EVENT, [x, y, color])
-    console.log(`✅ Saved ${x}:${y}:${color}`)
   },
   createUser: async ({ request }) => {
     const data = await request.formData()

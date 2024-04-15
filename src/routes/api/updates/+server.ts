@@ -1,5 +1,4 @@
-import { CELLS } from '$lib/constants'
-import { PAINT_EVENT, paintEmitter } from '$lib/server/PaintEvents'
+import { PAINT_EVENT, paintEmitter } from '$lib/server/EventEmitters'
 import type { RequestHandler } from '@sveltejs/kit'
 
 export const GET = (async () => {
