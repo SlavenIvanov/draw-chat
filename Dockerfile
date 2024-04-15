@@ -1,0 +1,31 @@
+# Step 1: Build the application
+FROM oven/bun AS builder
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy all the application files to the container
+COPY . .
+
+# Run your build process
+RUN bun i
+RUN bun --bun run build
+
+# Step 2: Create a smaller image for running the application
+FROM oven/bun
+
+# Copy only the necessary files from the builder image to the final image
+COPY --from=builder /app .
+
+# Expose the port the application will run on
+EXPOSE 3000
+
+# # Create a directory for the SQLite database
+# RUN mkdir /app/db
+
+# # Set the mount point for the SQLite database
+# VOLUME /app/db
+
+#Start the BUN server
+CMD ["bun","run", "start"]
+# ENTRYPOINT ["tail", "-f", "/dev/null"]

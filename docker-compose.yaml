@@ -1,0 +1,11 @@
+version: '1'
+services:
+  external:
+    container_name: your_container
+    # The name of the image that will be created when building this container
+    image: sveltekit-sqlite-drizzle
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
