@@ -1,3 +1,7 @@
+[phases.setup]
+nixpkgsArchive = 'd68b3b0c914aea10eee7cf2e59ef44e39bc221c9'
+nixPkgs = ['...', 'nodejs']
+
 [phases.build]
 nixpkgsArchive = 'd68b3b0c914aea10eee7cf2e59ef44e39bc221c9'
 cmds = ['bun --bun run build']
