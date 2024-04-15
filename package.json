@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "bun ./build/index.js",
+    "start": "drizzle:migrate && bun ./build/index.js",
     "build": "vite build",
     "dev": "vite dev",
     "preview": "vite preview",
