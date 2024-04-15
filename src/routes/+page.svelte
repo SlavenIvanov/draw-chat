@@ -130,7 +130,7 @@
     <p>Error</p>
   {/await}
   <div class="p-3 gap-3 flex flex-col">
-    <div class="text-xl text-center">Who is online 👇</div>
+    <div class="text-xl text-center">✨ Who is online ✨</div>
     {#each onlineUsers as onlineUser}
       <p
         class={`p-2 outline outline-solid outline-2 ${onlineUser.name === $userName ? 'outline-purple-400' : ''}`}
