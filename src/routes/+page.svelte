@@ -40,10 +40,7 @@
 
       const [x, y, color] = update
 
-      const pixel = document.getElementById(`${x}:${y}`)
-      if (!pixel) return
-
-      pixel.style.background = color
+      setPixelColor(x, y, color)
     }
     if (!$lacksName) {
       sendHeartbeat($userName)
@@ -66,6 +63,13 @@
       clearInterval(onlineUsersInterval)
     }
   })
+
+  function setPixelColor(x: number, y: number, color: string) {
+    const pixel = document.getElementById(`${x}:${y}`)
+    if (!pixel) return
+
+    pixel.style.background = color
+  }
 </script>
 
 <div class="h-screen flex flex-col items-center justify-center">
@@ -86,7 +90,21 @@
         {/each}
       </div>
       <form
-        use:enhance
+        use:enhance={({ formData }) => {
+          const coords = formData.get('coords') as string
+          const color = formData.get('color') as string
+
+          if (!coords) return
+
+          const [xString, yString] = coords.split(':')
+
+          const x = parseInt(xString)
+          const y = parseInt(yString)
+
+          setPixelColor(x,y,color)
+
+          return () => {}
+        }}
         on:submit|preventDefault
         method="POST"
         action="?/paint"
